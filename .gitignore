@@ -1,0 +1,2 @@
+./scripts/kafka.properties
+./scripts/certs/*.p12

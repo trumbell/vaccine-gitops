@@ -1,0 +1,19 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  annotations:
+    app.quarkus.io/vcs-url: https://github.com/ibm-cloud-architecture/vaccine-transport-simulator.git
+  labels:
+    app.kubernetes.io/name: vaccine-transport-simulator
+    app.kubernetes.io/version: 1.0.0
+    app: vaccinetransport
+    app.openshift.io/runtime: quarkus
+  name: vaccine-transport-simulator
+spec:
+  host: ""
+  path: /
+  port:
+    targetPort: 8080
+  to:
+    kind: Service
+    name: vaccine-transport-simulator

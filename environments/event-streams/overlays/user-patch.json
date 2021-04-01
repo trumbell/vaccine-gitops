@@ -1,0 +1,9 @@
+[
+    {"op" : "replace",
+    "path": "/metadata/name",
+    "value": "scram-user3"},
+    {"op" : "replace",
+     "path": "/metadata/labels",
+     "value": {"eventstreams.ibm.com/cluster": "eda-dev"}
+    }
+]

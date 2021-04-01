@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: vaccine-cold-chain
+spec:
+  destination:
+    name: ''
+    namespace: vaccine-solution
+    server: 'https://c109-e.us-east.containers.cloud.ibm.com:31196'
+  source:
+    path: apps/cold-chain-use-case
+    repoURL: 'https://github.com/ibm-cloud-architecture/vaccine-gitops'
+    targetRevision: main
+    kustomize:
+      images:
+        - 'ibmcase/reefer-monitoring-agent:latest'
+        - 'ibmcase/vaccine-reefer-simulator:latest'
+  project: default

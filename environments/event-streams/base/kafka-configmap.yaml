@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kafka-topic
+data:
+  KAFKA_BOOTSTRAP_SERVERS: eda-dev-kafka-bootstrap.eventstreams.svc:9093
+  ORDER_TOPIC: "vaccine.public.orderevents"
+  REEFER_TELEMETRY_TOPIC: "reefer.telemetries"
+  SHIPMENT_PLAN_TOPIC: "vaccine.shipment.plans"
+  INVENTORY_TOPIC:  "vaccine.inventory"
+  TRANSPORTATION_TOPIC:  "vaccine.transportation"
+  REEFER_TOPIC:  "vaccine.reefer"
+  

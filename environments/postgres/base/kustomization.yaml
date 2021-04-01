@@ -1,0 +1,12 @@
+secretGenerator:
+  - name: postgresql-creds
+    literals:
+      - url="jdbc:postgresql://postgres-db-postgresql/orderdb"
+      - username="postgres"
+      - password="supersecret"
+generatorOptions:
+  disableNameSuffixHash: true
+resources:
+  - ./statefulset.yaml
+  - ./svc.yaml
+  - ./svc-headless.yaml

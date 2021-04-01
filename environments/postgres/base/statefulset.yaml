@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres-db-postgresql
+  labels:
+    app: postgresql
+    release: "postgres-db"
+    app.kubernetes.io/part-of: vaccine-solution
+spec:
+  serviceName: postgres-db-postgresql-headless
+  replicas: 1
+  updateStrategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: postgresql
+      release: "postgres-db"
+      role: master
+  template:
+    metadata:
+      name: postgres-db-postgresql
+      labels:
+        app: postgresql
+        release: "postgres-db"
+        role: master
+        app.kubernetes.io/part-of: vaccine-solution
+    spec:
+      securityContext: {}
+      containers:
+        - name: postgres-db-postgresql
+          image: docker.io/debezium/postgres:11
+          imagePullPolicy: "IfNotPresent"
+          resources:
+            requests:
+              cpu: 250m
+              memory: 256Mi
+          env:
+            - name: POSTGRESQL_PORT_NUMBER
+              value: "5432"
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgresql-creds
+                  key: username
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgresql-creds
+                  key: password
+            - name: POSTGRES_DB
+              value: "orderdb"
+            - name: POSTGRESQL_ENABLE_LDAP
+              value: "no"
+          ports:
+            - name: postgresql
+              containerPort: 5432
+          livenessProbe:
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - exec pg_isready -U "${POSTGRES_USER}" -d "${POSTGRES_DB}" -h 127.0.0.1 -p 5432
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 6
+          readinessProbe:
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - -e
+                - |
+                  pg_isready -U "${POSTGRES_USER}" -d "${POSTGRES_DB}" -h 127.0.0.1 -p 5432
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 6
+  

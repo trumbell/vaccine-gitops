@@ -1,0 +1,9 @@
+apiVersion: apicur.io/v1alpha1
+kind: ApicurioRegistry
+metadata:
+  name: eda-apicurioregistry
+spec:
+  configuration:
+    persistence: "streams"
+    streams:
+      bootstrapServers: "vaccine-kafka-kafka-bootstrap.jbsandbox.svc:9092"

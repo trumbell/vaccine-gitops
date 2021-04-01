@@ -1,0 +1,10 @@
+
+resources:
+  - ./namespace.yaml
+  - ./IBMCatalogSource.yaml
+  - ./eventstreams-minimal-prod.yaml
+  - ./es-user.yaml
+  - ./es-topics.yaml
+  
+
+namespace: eventstreams

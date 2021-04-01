@@ -1,0 +1,7 @@
+bases:
+  - ../base
+patches:
+- path: user-patch.json
+  target:
+    kind: KafkaUser
+    name: scram-user

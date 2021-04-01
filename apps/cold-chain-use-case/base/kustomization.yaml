@@ -1,0 +1,4 @@
+bases:
+  - ../../freezer-mgr
+  - ../../monitoring-agent
+  - ../../reefer-simulator
