@@ -46,9 +46,3 @@ spec:
     trustedCertificates:
       - certificate: ca.crt
         secretName: eda-dev-cluster-ca-cert
-#  authentication:
-#    type: scram-sha-512
-#    username: my-connect-user
-#    passwordSecret:
-#      secretName: my-connect-user
-#      password: my-connect-password-key

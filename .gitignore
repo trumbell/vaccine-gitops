@@ -1,2 +1,4 @@
 scripts/kafka.properties
 scripts/certs/*.p12
+scripts/env.sh
+scripts/env-strimzi.sh

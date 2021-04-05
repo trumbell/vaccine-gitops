@@ -94,6 +94,13 @@ then
    oc get secret ${TLS_USER} -n ${KAFKA_NS} -o json | jq -r '.metadata.name="tls-user"' | jq -r '.metadata.namespace="'${PROJECT_NAME}'"' | oc apply -f -
 fi
 
+if [[ -z $(oc get secret vaccine-oro-secret 2> /dev/null) ]]
+then
+   pwd=$(oc get secret ${SCRAM_USER} -n ${KAFKA_NS} -o jsonpath='{.data.password}' | base64 decode)
+   oc create secret generic vaccine-oro-secret \
+    --from-literal=KAFKA_BROKERS=$EXTERNAL_KAFKA_BOOTSTRAP_SERVERS \
+    --from-literal=SCHEMA_REGISTRY_URL=https://${SCRAM_USER}:${pwd}@${SCHEMA_REGISTRY_URL}
+fi
 
 if [[ -z $(oc get secret kafka-cluster-ca-cert 2> /dev/null) ]]
 then
