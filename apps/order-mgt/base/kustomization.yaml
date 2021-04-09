@@ -1,7 +1,6 @@
 resources:
   - ./rolebinding.yaml
   - ./configmap.yaml
-  - ./secret.yaml
   - ./deployment.yaml
   - ./service.yaml
   - ./route.yaml

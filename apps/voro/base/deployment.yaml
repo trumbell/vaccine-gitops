@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: vaccine-order-optimizer
-        image: ibmcase/vaccine-order-optimizer
+        image: quay.io/ibmcase/vaccine-order-optimizer
         imagePullPolicy: Always
         ports:
         - containerPort: 5000
@@ -27,7 +27,7 @@ spec:
           - configMapRef:
               name: kafka-topics-cm
           - secretRef:
-              name: vaccine-oro-secret
+              name: vaccine-oro-secrets
         resources:
           limits:
             cpu: 200m
