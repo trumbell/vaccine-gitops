@@ -1,0 +1,16 @@
+{
+  "type": "record",
+  "name": "Key",
+  "namespace": "vaccine.public.orderevents",
+  "fields": [
+    {
+      "name": "id",
+      "type": {
+        "type": "string",
+        "connect.version": 1,
+        "connect.name": "io.debezium.data.Uuid"
+      }
+    }
+  ],
+  "connect.name": "vaccine.public.orderevents.Key"
+}

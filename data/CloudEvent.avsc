@@ -1,0 +1,207 @@
+{
+  "type": "record",
+  "name": "VaccineOrderCloudEvent",
+  "namespace": "ibm.gse.eda.vaccine.orderoptimizer",
+  "fields": [
+    {
+      "type": "string",
+      "name": "type",
+      "doc": "Type of event"
+    },
+    {
+      "type": "string",
+      "name": "specversion",
+      "doc": "CloudEvents specVersion"
+    },
+    {
+      "type": "string",
+      "name": "source",
+      "doc": "The source where this event comes from"
+    },
+    {
+      "type": "string",
+      "name": "id",
+      "doc": "CloudEvents event uniquely id"
+    },
+    {
+      "type": "string",
+      "name": "time",
+      "doc": "Time when this event was created"
+    },
+    {
+      "type": "string",
+      "name": "dataschema",
+      "doc": "Location of the events Avro data schema"
+    },
+    {
+      "type": "string",
+      "name": "datacontenttype",
+      "doc": "Type of the data attributes content"
+    },
+    {
+      "type": [
+        {
+          "type": "record",
+          "name": "Inventory",
+          "namespace": "ibm.gse.eda.vaccine.orderoptimizer",
+          "fields": [
+            {
+              "type": "string",
+              "name": "lot_id",
+              "doc": "Inventory lot ID"
+            },
+            {
+              "type": "int",
+              "name": "qty",
+              "doc": "Quantity"
+            },
+            {
+              "type": "string",
+              "name": "location",
+              "doc": "Inventory location"
+            },
+            {
+              "type": "string",
+              "name": "date_available",
+              "doc": "Date when the inventory will be available"
+            }
+          ],
+          "doc": "Avro data schema for inventory events"
+        },
+        {
+          "type": "record",
+          "name": "Reefer",
+          "namespace": "ibm.gse.eda.vaccine.orderoptimizer",
+          "fields": [
+            {
+              "type": "string",
+              "name": "reefer_id",
+              "doc": "Reefer container ID"
+            },
+            {
+              "type": "string",
+              "name": "status",
+              "doc": "Reefer Container ID status. Could be an Enum"
+            },
+            {
+              "type": "string",
+              "name": "location",
+              "doc": "Reefer container location"
+            },
+            {
+              "type": "string",
+              "name": "date_available",
+              "doc": "Date when the inventory will be available"
+            }
+          ],
+          "doc": "Avro data schema for Reefer events"
+        },
+        {
+          "type": "record",
+          "name": "Transportation",
+          "namespace": "ibm.gse.eda.vaccine.orderoptimizer",
+          "fields": [
+            {
+              "type": "string",
+              "name": "lane_id",
+              "doc": "Lane ID"
+            },
+            {
+              "type": "string",
+              "name": "from_loc",
+              "doc": "Origin location for this transport"
+            },
+            {
+              "type": "string",
+              "name": "to_loc",
+              "doc": "Destination location for this transport"
+            },
+            {
+              "type": "int",
+              "name": "transit_time",
+              "doc": "Time it takes for the transportation"
+            },
+            {
+              "type": "int",
+              "name": "reefer_cost",
+              "doc": "Cost associated for a Reefer container in this transportation"
+            },
+            {
+              "type": "int",
+              "name": "fixed_cost",
+              "doc": "Fixed cost associated for this transportation"
+            }
+          ],
+          "doc": "Avro data schema for transportation events"
+        },
+        {
+          "type": "record",
+          "name": "ShipmentPlan",
+          "namespace": "ibm.gse.eda.vaccine.orderoptimizer",
+          "fields": [
+            {
+              "type": {
+                "type": "array",
+                "default": [],
+                "items": {
+                  "type": "record",
+                  "name": "Shipment",
+                  "namespace": "ibm.gse.eda.vaccine.orderoptimizer",
+                  "fields": [
+                    {
+                      "type": "string",
+                      "name": "Type",
+                      "doc": "Type of shipment"
+                    },
+                    {
+                      "type": "string",
+                      "name": "From",
+                      "doc": "Location that the shipment is shipped from"
+                    },
+                    {
+                      "type": "string",
+                      "name": "DepartureDate",
+                      "doc": "Departure date for the shipment"
+                    },
+                    {
+                      "type": "string",
+                      "name": "To",
+                      "doc": "Location that the shipment is shipped to"
+                    },
+                    {
+                      "type": "string",
+                      "name": "ArrivalDate",
+                      "doc": "Arrival date for the shipment"
+                    },
+                    {
+                      "type": "int",
+                      "name": "Qty",
+                      "doc": "Vaccine quantity that this shipment carries"
+                    },
+                    {
+                      "type": "int",
+                      "name": "Reefers",
+                      "doc": "Amount of refrigerated Reefer containers in this shipment"
+                    },
+                    {
+                      "type": "int",
+                      "name": "Cost",
+                      "doc": "Cost of the shipment"
+                    }
+                  ],
+                  "doc": "Avro data schema for a shipment"
+                }
+              },
+              "name": "Shipments",
+              "doc": "Shipment plan object that is composed of shipments"
+            }
+          ],
+          "doc": "Avro data schema for shipment plans events"
+        }
+      ],
+      "name": "data",
+      "doc": "The event"
+    }
+  ],
+  "doc": "Avro data schema for Vaccine Order Optimizer events"
+}
