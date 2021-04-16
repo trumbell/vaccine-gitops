@@ -99,28 +99,33 @@ echo "Create secrets for apps"
 echo "#####################################################"
 SCRAM_USER_PWD=$(oc get secret ${SCRAM_USER} -o jsonpath='{.data.password}' | base64 --decode)
 KAFKA_BOOTSTRAP=$(oc get route -n ${KAFKA_NS} ${KAFKA_CLUSTER_NAME}-kafka-bootstrap -o jsonpath="{.status.ingress[0].host}:443")
+
+if [[ -z $(oc get secret kafka-schema-registry 2> /dev/null) ]]
+then
+    oc create secret generic  kafka-schema-registry \
+      --from-literal=SCHEMA_REGISTRY_URL=https://${SCRAM_USER}:${SCRAM_USER_PWD}@${SCHEMA_REGISTRY_URL} \
+  
+fi
+
 if [[ -z $(oc get secret vaccine-order-secrets 2> /dev/null) ]]
 then
     oc create secret generic vaccine-order-secrets \
     --from-literal=SHIPMENT_PLAN_TOPIC=$YOUR_SHIPMENT_PLAN_TOPIC \
     --from-literal=KAFKA_BOOTSTRAP_SERVERS=$INTERNAL_KAFKA_BOOTSTRAP_SERVERS \
-    --from-literal=SCHEMA_REGISTRY_URL=https://${SCRAM_USER}:${SCRAM_USER_PWD}@${SCHEMA_REGISTRY_URL} \
     --from-literal=APP_TRANSPORTATIONURL=http://vaccine-transport-simulator.${YOUR_PROJECT_NAME}.svc/transportation
 
 fi
 if [[ -z $(oc get secret vaccine-transport-secrets 2> /dev/null) ]]
 then
     oc create secret generic vaccine-transport-secrets \
-    --from-literal=KAFKA_BOOTSTRAP_SERVERS=$EXTERNAL_KAFKA_BOOTSTRAP_SERVERS \
-    --from-literal=SCHEMA_REGISTRY_URL=https://${SCRAM_USER}:${SCRAM_USER_PWD}@${SCHEMA_REGISTRY_URL}
+    --from-literal=KAFKA_BOOTSTRAP_SERVERS=$EXTERNAL_KAFKA_BOOTSTRAP_SERVERS 
 fi
 
 if [[ -z $(oc get secret vaccine-oro-secrets 2> /dev/null) ]]
 then
   
    oc create secret generic vaccine-oro-secrets \
-    --from-literal=KAFKA_BROKERS=$EXTERNAL_KAFKA_BOOTSTRAP_SERVERS \
-    --from-literal=SCHEMA_REGISTRY_URL=https://${SCRAM_USER}:${SCRAM_USER_PWD}@${SCHEMA_REGISTRY_URL}
+    --from-literal=KAFKA_BROKERS=$EXTERNAL_KAFKA_BOOTSTRAP_SERVERS 
 fi
 
 echo "#####################################################"

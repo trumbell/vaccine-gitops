@@ -94,8 +94,17 @@ spec:
             name: kafka-topics-cm
         - secretRef:
             name: vaccine-order-secrets
+        - secretRef:
+            name: kafka-schema-registry
         image: quay.io/ibmcase/vaccineorderms
         imagePullPolicy: Always
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 512Mi
+          requests:
+            cpu: 250m
+            memory: 64Mi
         livenessProbe:
           failureThreshold: 3
           httpGet:

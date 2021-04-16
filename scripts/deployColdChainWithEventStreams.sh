@@ -33,10 +33,56 @@ source ${scriptDir}/defineProject.sh
 
 createProjectAndServiceAccount $YOUR_PROJECT_NAME $SA_NAME
 
-echo "#####################################################"
-echo "Create secret for topic name and bootstrap server URL"
-echo "#####################################################"
+echo "#############"
+echo "Define users" 
+echo "#############"
+source ${scriptDir}/defineUser.sh
+if [[ -z $(oc get secret ${SCRAM_USER} -n ${KAFKA_NS} 2> /dev/null) ]]
+then
+    defineUser ${SCRAM_USER} ${KAFKA_CLUSTER_NAME} scram-user ${ENVPATH}
+    # THERE IS A BUG in oc or kubectl kustomize that is not parsing the json
+    # error: json: cannot unmarshal object into Go struct field Kustomization.patchesStrategicMerge of type patch.StrategicMerge
+    oc apply -k  ${ENVPATH}/overlays -n ${KAFKA_NS}
+    sleep 5
+    
+else
+    echo "${SCRAM_USER} presents"
+fi
 
+
+if [[ -z $(oc get secret ${TLS_USER} -n ${KAFKA_NS} 2> /dev/null) ]]
+then
+    defineUser ${TLS_USER} ${KAFKA_CLUSTER_NAME} tls-user ${ENVPATH}
+    oc apply -k  $ENVPATH/overlays -n ${KAFKA_NS}
+    sleep 5
+    
+else
+    echo "${TLS_USER} presents"
+fi
+
+echo "##########################"
+echo "Copy user secrets to ${YOUR_PROJECT_NAME}" 
+echo "##########################"
+if [[ -z $(oc get secret ${TLS_USER} 2> /dev/null) ]]
+then
+   # As the project is personal to the user, we can keep a generic name for the secret
+   oc get secret ${TLS_USER} -n ${KAFKA_NS} -o json | jq -r '.metadata.name="tls-user"' | jq -r '.metadata.namespace="'${YOUR_PROJECT_NAME}'"' | oc apply -f -
+fi
+
+if [[ -z $(oc get secret ${SCRAM_USER} 2> /dev/null) ]]
+then
+    # As the project is personal to the user, we can keep a generic name for the secret
+    oc get secret ${SCRAM_USER} -n ${KAFKA_NS} -o json |  jq -r '.metadata.name="scram-user"' | jq -r '.metadata.namespace="'${YOUR_PROJECT_NAME}'"' | oc apply -f -
+fi
+
+if [[ -z $(oc get secret kafka-cluster-ca-cert 2> /dev/null) ]]
+then
+    oc get secret ${KAFKA_CLUSTER_NAME}-cluster-ca-cert -n ${KAFKA_NS} -o json | jq -r '.metadata.name="kafka-cluster-ca-cert"' |jq -r '.metadata.namespace="'${YOUR_PROJECT_NAME}'"' | oc apply -f -
+fi
+
+echo "#####################################################"
+echo "Create secrets for apps"
+echo "#####################################################"
 if [[ -z $(oc get secret freezer-mgr-secret 2> /dev/null) ]]
 then
     oc create secret generic freezer-mgr-secret \
@@ -65,44 +111,6 @@ then
     --from-literal=CP4D_API_KEY=$YOUR_CP4D_API_KEY \
     --from-literal=CP4D_AUTH_URL=$YOUR_CP4D_AUTH_URL \
     --from-literal=ANOMALY_DETECTION_URL=$ANOMALY_DETECTION_URL
-fi
-
-echo "#############"
-echo "Define users" 
-echo "#############"
-source ${scriptDir}/defineUser.sh
-
-
-if [[ -z $(oc get secret ${SCRAM_USER} -n ${KAFKA_NS} 2> /dev/null) ]]
-then
-    defineUser ${SCRAM_USER} ${KAFKA_CLUSTER_NAME} scram-user ${ENVPATH}
-    # THERE IS A BUG in oc or kubectl kustomize that is not parsing the json
-    # error: json: cannot unmarshal object into Go struct field Kustomization.patchesStrategicMerge of type patch.StrategicMerge
-    oc apply -k  ${ENVPATH}/overlays -n ${KAFKA_NS}
-    sleep 5
-    
-else
-    echo "${SCRAM_USER} presents"
-fi
-# As the project is personal to the user, we can keep a generic name for the secret
-oc get secret ${SCRAM_USER} -n ${KAFKA_NS} -o json |  jq -r '.metadata.name="scram-user"' | jq -r '.metadata.namespace="'${YOUR_PROJECT_NAME}'"' | oc apply -f -
-
-if [[ -z $(oc get secret ${TLS_USER} -n ${KAFKA_NS} 2> /dev/null) ]]
-then
-    defineUser ${TLS_USER} ${KAFKA_CLUSTER_NAME} tls-user ${ENVPATH}
-    oc apply -k  $ENVPATH/overlays -n ${KAFKA_NS}
-    sleep 5
-    
-else
-    echo "${TLS_USER} presents"
-fi
-
-# As the project is personal to the user, we can keep a generic name for the secret
-oc get secret ${TLS_USER} -n ${KAFKA_NS} -o json | jq -r '.metadata.name="tls-user"' | jq -r '.metadata.namespace="'${PROJECT_NAME}'"' | oc apply -f -
-
-if [[ -z $(oc get secret kafka-cluster-ca-cert 2> /dev/null) ]]
-then
-    oc get secret ${KAFKA_CLUSTER_NAME}-cluster-ca-cert -n ${KAFKA_NS} -o json | jq -r '.metadata.name="kafka-cluster-ca-cert"' |jq -r '.metadata.namespace="'${PROJECT_NAME}'"' | oc apply -f -
 fi
 
 

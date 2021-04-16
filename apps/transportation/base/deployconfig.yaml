@@ -57,6 +57,8 @@ spec:
             name: vaccine-transport-cm
         - secretRef:
             name: vaccine-transport-secrets
+        - secretRef:
+            name: kafka-schema-registry
         image: quay.io/ibmcase/vaccine-transportation
         imagePullPolicy: Always
         livenessProbe:
