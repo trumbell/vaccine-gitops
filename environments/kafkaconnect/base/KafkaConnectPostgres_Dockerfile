@@ -1,0 +1,13 @@
+# This Dockerfile expects the Debezium CDC for Postgres connector binaries and the Apicurio Schema Registry and the Avro protocol binaries
+# These are expected to be placed in the ./connectors/ folder
+# All binaries can be dowloaded as part of two packages from Maven
+# The Debezium CDC for Postgres connector binaries can be found in https://repo1.maven.org/maven2/io/debezium/debezium-connector-postgres/
+# The Apicurio Schema Registry and the Avro protocol binaries can be found in https://repo1.maven.org/maven2/io/apicurio/apicurio-registry-distro-connect-converter/
+# Download the latest debezium-connector-postgres-X.Y.Z.Final-plugin.tar.gz and apicurio-registry-distro-connect-converter-X.Y.Z.Final-converter.tar.gz respectively
+# Untar both files and place all its jars in the ./connectors/ folder
+# Finally, build the image --> docker build -f KafkaConnectPostgres_Dockerfile -t quay.io/ibmcase/kafka-connect-postgres .
+
+FROM quay.io/strimzi/kafka:0.22.0-kafka-2.7.0
+USER root:root
+COPY ./connectors/ /opt/kafka/plugins/
+USER 1001
