@@ -27,9 +27,9 @@ QUARKUS_DATASOURCE_PASSWORD=adifficultpasswordtoguess
 QUARKUS_DATASOURCE_USERNAME=postgres
 
 # Cloud pak for data user - keep it empty so the code will not use anomaly detection WML
-PREDICTION_ENABLED=false
-YOUR_CP4D_USER=auserforcp4d
-YOUR_CP4D_API_KEY=notearealkey
+PREDICTION_ENABLED=true
+YOUR_CP4D_USER=jboyer
+YOUR_CP4D_API_KEY=YdnIRC3WnuBziDvq98J00t4Crq8BtwsixwtKiALa
 # URL to authenticate a user to get a JWT token
-YOUR_CP4D_AUTH_URL=https://notarealdomain.com
-ANOMALY_DETECTION_URL=https://notarealdomain.com
+YOUR_CP4D_AUTH_URL=https://zen-cpd-zen.apps.cpdv35-swat.cpd-daell.com/icp4d-api/v1/authorize
+ANOMALY_DETECTION_URL=https://zen-cpd-zen.apps.cpdv35-swat.cpd-daell.com/ml/v4/deployments/b1a0710f-6fff-4e5f-81a6-4c6e3662df1f/predictions?version=2021-04-12
