@@ -2,7 +2,6 @@ apiVersion: kafka.strimzi.io/v1beta1
 kind: KafkaConnect
 metadata:
   name: connect-cluster-<UNIQUE_ID>
-  namespace: vaccine-omo
   annotations:
     strimzi.io/use-connector-resources: "true"
 spec:
