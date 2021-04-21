@@ -1,0 +1,39 @@
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaConnect
+metadata:
+  name: connect-cluster-<UNIQUE_ID>
+  annotations:
+    strimzi.io/use-connector-resources: "true"
+spec:
+  bootstrapServers: '<KAFKA_BOOTSTRAP_URL>'
+  image: quay.io/ibmcase/kafka-connect-postgres
+  authentication:
+    certificateAndKey:
+      certificate: user.crt
+      key: user.key
+      secretName: tls-user
+    type: tls
+  version: 2.7.0
+  tls:
+    trustedCertificates:
+      - secretName: kafka-cluster-ca-cert
+        certificate: ca.crt
+  replicas: 1
+  config:
+    group.id: connect-cluster-<UNIQUE_ID>
+    value.converter: org.apache.kafka.connect.json.JsonConverter
+    value.converter.schemas.enable: false
+    offset.storage.topic: connect-cluster-offsets-<UNIQUE_ID>
+    config.storage.topic: connect-cluster-configs-<UNIQUE_ID>
+    status.storage.topic: connect-cluster-status-<UNIQUE_ID>
+    config.storage.replication.factor: 3
+    offset.storage.replication.factor: 3
+    status.storage.replication.factor: 3
+    config.providers: file
+    config.providers.file.class: org.apache.kafka.common.config.provider.FileConfigProvider
+  tasksMax: 3
+  externalConfiguration:
+    volumes:
+      - name: postgres-connector
+        secret:
+          secretName: postgres-connector
