@@ -27,8 +27,6 @@ spec:
           - configMapRef:
               name: kafka-topics-cm
           - secretRef:
-              name: vaccine-oro-secrets
-          - secretRef:
               name: kafka-schema-registry
         resources:
           limits:
@@ -41,7 +39,12 @@ spec:
             valueFrom:
               secretKeyRef:
                 key: password
-                name: scram-user 
+                name: scram-user
+          - name: KAFKA_BROKERS
+            valueFrom:
+              configMapKeyRef:
+                key: KAFKA_BOOTSTRAP_SERVERS_EXT
+                name: kafka-topics-cm
           - name: KAFKA_CERT
             value: "/app/certs/ca.crt"
           - name: PYTHONUNBUFFERED
@@ -49,6 +52,8 @@ spec:
           - name: JSONIFY_PRETTYPRINT_REGULAR
             value: "True"
           - name: FLASK_DEBUG
+            value: "False"
+          - name: DEBUG_OPTIMIZATION
             value: "False"
         expose: true
         volumeMounts:

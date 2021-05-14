@@ -56,6 +56,12 @@ fi
 
 validateLogin $1
 
+if [[ $? -gt 0 ]]
+then
+    echo "[ERROR] - An error occurred while logging into your OpenShift cluster"
+    exit 1
+fi
+
 
 ### Strimzi operator version stability appears to be not so stable, so this will
 ### specify the latest manually verified operator version for a given OCP version
@@ -77,28 +83,51 @@ case ${OCP_VERSION} in
     ;;
 esac
 
+echo "Install the Strimzi Operator"
 install_operator "strimzi-kafka-operator" "${STRIMZI_OPERATOR_VERSION}" "community-operators"
 
-
 ###TODO### Alternate implementation for `oc wait --for=condition=AtLatestKnown subscription/__operator_subscription__ --timeout 300s`
-for operator in strimzi-kafka-operator
-do
-  counter=0
-  desired_state="AtLatestKnown"
-  until [[ ("$(oc get -o json -n openshift-operators subscription ${operator} | jq -r .status.state)" == "${desired_state}") || ( ${counter} == 60 ) ]]
-  do
-    echo Waiting for ${operator} operator to be deployed...
-    ((counter++))
-    sleep 5
-  done
-done
-
-oc apply -k environments/strimzi -n $YOUR_PROJECT_NAME
-echo "Waiting for Kafka cluster to be available..."
+echo "Waiting for strimzi-kafka-operator operator to be deployed..."
 counter=0
-until [[ ($(oc get pods -n ${YOUR_PROJECT_NAME} | grep kafka 2> /dev/null)) || ( ${counter} == 60 ) ]]
+desired_state="AtLatestKnown"
+until [[ ("$(oc get -n openshift-operators subscription strimzi-kafka-operator -o jsonpath="{.status.state}")" == "${desired_state}") || ( ${counter} == 60 ) ]]
 do
+  ((counter++))
+  echo -n "..."
+  sleep 5
+done
+if [[ ${counter} == 60 ]]
+then
+  echo
+  echo "[ERROR] - Timeout occurred while deploying the Strimzi Kafka Operator"
+  exit 1
+else
+  echo "Done"
+fi
+
+echo "Create a Kafka cluster"
+oc apply -k ../environments/strimzi -n $YOUR_PROJECT_NAME
+echo -n "Waiting for the Kafka cluster to be available..."
+counter=0
+isKafkaReady="NotReady"
+until [[ ("${isKafkaReady}" == "Ready") || ( ${counter} == 60 ) ]]
+do
+  isKafkaReady=`oc get kafkas.kafka.strimzi.io ${KAFKA_CLUSTER_NAME} -n ${YOUR_PROJECT_NAME} -o jsonpath="{.status.conditions[].type}" 2> /dev/null`
   echo -n "..."
   ((counter++))
   sleep 5
 done
+if [[ ${counter} == 60 ]]
+then
+  echo
+  echo "[ERROR] - Timeout occurred while deploying the Kafka Cluster"
+  exit 1
+else
+  echo "Done"
+fi
+# until [[ ($(oc get pods -n ${YOUR_PROJECT_NAME} | grep kafka 2> /dev/null)) || ( ${counter} == 60 ) ]]
+# do
+#   echo -n "..."
+#   ((counter++))
+#   sleep 5
+# done

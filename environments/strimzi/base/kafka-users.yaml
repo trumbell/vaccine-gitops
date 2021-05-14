@@ -1,3 +1,4 @@
+# Important: The permission at the cluster resource must be All so that the Apicurio registry does not return {"message":"Cluster authorization failed.","error_code":500}
 apiVersion: kafka.strimzi.io/v1beta1
 kind: KafkaUser
 metadata:
@@ -15,25 +16,25 @@ spec:
           type: topic
           name: '*'
           patternType: literal
-        operation: Write
+        operation: All
       - host: '*'
+        operation: All
         resource:
-          type: topic
           name: '*'
           patternType: literal
-        operation: Read
-      - host: '*'
-        resource:
-          type: topic
-          name: '*'
-          patternType: literal
-        operation: Create
-      - host: '*'
-        resource:
           type: group
+      - host: '*'
+        operation: All
+        resource:
           name: '*'
           patternType: literal
-        operation: Read
+          type: cluster
+      - host: '*'
+        operation: All
+        resource:
+          name: '*'
+          patternType: literal
+          type: transactionalId
 --- 
 
 apiVersion: kafka.strimzi.io/v1beta1
