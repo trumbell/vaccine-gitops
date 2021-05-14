@@ -36,9 +36,11 @@ metadata:
   namespace: ${3}
 spec:
   channel: ${4}
+  installPlanApproval: Automatic
   name: ${1}
   source: ${2}
   sourceNamespace: openshift-marketplace
+  startingCSV: apicurio-registry.v0.0.4-v1.3.2.final
 EOF
 }
 

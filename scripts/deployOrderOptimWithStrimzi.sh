@@ -284,7 +284,7 @@ echo "Check if the Postgres connector secret exists"
 if [[ -z $(oc get secret postgres-connector 2>/dev/null) ]]
 then
     echo "Postgres connector secret not found. Create it"
-    cat <<'EOF' >> connector.properties
+    cat <<EOF >> connector.properties
 database-dbname=orderdb
 database-hostname=postgres-db-postgresql
 database-port=5432
