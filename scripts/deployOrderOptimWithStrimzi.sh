@@ -5,15 +5,13 @@ scriptDir=$(dirname $0)
 ### PARAMETERS ###
 ##################
 
-# source ${scriptDir}/env-strimzi.sh
+### Make sure you have the appropriate values for the following variables in the env-strimzi.sh file
+# YOUR_PROJECT_NAME="vaccine-solution"              # Default OpenShift project where this vaccine use case will be deployed into.
+# KAFKA_CLUSTER_NAME="vaccine-kafka"                # Default name for the Kafka Cluster this use case deploys. 
+# APICURIO_REGISTRY_NAME="vaccine-apicurioregistry" # Default name for the Apicurio Registry this use case deploys.
 
-# Username and Password for an OpenShift user with cluster-admin privileges.
-# cluster-admin privileges are required as this script deploys operators to
-# watch all namespaces.
-OCP_ADMIN_USER=${OCP_ADMIN_USER:=admin}
-OCP_ADMIN_PASSWORD=${OCP_ADMIN_PASSWORD:=admin}
-# The OpenShift project you want to deploy this use case to
-YOUR_PROJECT_NAME="jesus-auto"
+# Load environment variables
+source ${scriptDir}/env-strimzi.sh
 
 ###################################
 ### DO NOT EDIT BELOW THIS LINE ###
@@ -25,8 +23,6 @@ YOUR_PROJECT_NAME="jesus-auto"
 SA_NAME="vaccine-runtime"
 SCRAM_USER="scram-user"
 TLS_USER="tls-user"
-KAFKA_CLUSTER_NAME="vaccine-kafka"
-APICURIO_REGISTRY_NAME="vaccine-apicurioregistry"
 KAFKA_CONNECT_CLUSER_NAME="vaccine-connect-cluster"
 POSTGRES_CONNECTOR_NAME="vaccine-pg-connector"
 
