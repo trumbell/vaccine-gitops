@@ -292,7 +292,7 @@ database-server-name=vaccine
 table-whitelist=public.orderevents
 database-password=supersecret
 database-user=postgres
-schema-registry-url=http://${ar_service}:8080
+schema-registry-url=http://${ar_service}:8080/api
 EOF
     oc create secret generic postgres-connector --from-file=./connector.properties && rm -rf connector.properties
     if [[ $? -gt 0 ]]; then echo "[ERROR] - An error occurred while creating the Postgres connector secret"; exit 1; else echo "Done"; fi
