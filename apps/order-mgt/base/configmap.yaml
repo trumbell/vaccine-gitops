@@ -5,6 +5,4 @@ metadata:
 data:
   APP_VERSION: 0.0.5
   KAFKA_USER: tls-user
-  KAFKA_CA_NAME: kafka-cluster-ca-cert
-  KAFKA_BOOTSTRAP_SERVERS: eda-dev-kafka-bootstrap.eventstreams.svc:9093
   EDA_LOGGING_LEVEL: INFO
