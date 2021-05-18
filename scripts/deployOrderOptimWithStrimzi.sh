@@ -164,8 +164,8 @@ fi
 ### Kafka Topics Configmap
 echo
 echo "Create Kafka Topics configmap"
-kafka_cluster_internal_listener=`oc get kafkas.kafka.strimzi.io vaccine-kafka -o jsonpath="{.status.listeners[?(@.type=='tls')].bootstrapServers}"`
-kafka_cluster_external_listener=`oc get kafkas.kafka.strimzi.io vaccine-kafka -o jsonpath="{.status.listeners[?(@.type=='external')].bootstrapServers}"`
+kafka_cluster_internal_listener=`oc get kafkas.kafka.strimzi.io ${KAFKA_CLUSTER_NAME} -o jsonpath="{.status.listeners[?(@.type=='tls')].bootstrapServers}"`
+kafka_cluster_external_listener=`oc get kafkas.kafka.strimzi.io ${KAFKA_CLUSTER_NAME} -o jsonpath="{.status.listeners[?(@.type=='external')].bootstrapServers}"`
 cat <<EOF | oc apply -f -
 apiVersion: v1
 kind: ConfigMap
@@ -261,9 +261,23 @@ kind: Secret
 metadata:
   name: kafka-schema-registry
 stringData:
-  SCHEMA_REGISTRY_URL: http://${ar_service}:8080/api/ccompat
+  SCHEMA_REGISTRY_URL: http://${ar_service}:8080/api
 EOF
 if [[ $? -gt 0 ]]; then echo "[ERROR] - An error occurred while creating the Schema Registry secret"; exit 1; else echo "Done"; fi
+
+### Create Schema Registry for Confluent compatibility secret
+echo
+echo "Create the Schema Registry for Confluent compatibility secret..."
+ar_service=`oc get apicurioregistry ${APICURIO_REGISTRY_NAME} -o jsonpath="{.status.serviceName}"`
+cat <<EOF | oc apply -f -
+apiVersion: v1
+kind: Secret
+metadata:
+  name: kafka-schema-registry-ccompat
+stringData:
+  SCHEMA_REGISTRY_URL: http://${ar_service}:8080/api/ccompat
+EOF
+if [[ $? -gt 0 ]]; then echo "[ERROR] - An error occurred while creating the Schema Registry for Confluent compatibility secret"; exit 1; else echo "Done"; fi
 
 #####################
 ### 5. Postgresql ###
@@ -313,7 +327,6 @@ oc apply -k ../apps/order-mgt -n $YOUR_PROJECT_NAME
 echo "Wait for the Order Management for Postgres microservice to be deployed..."
 oc wait pod --for=condition=Ready -l app=vaccineorderms -n ${YOUR_PROJECT_NAME} --timeout=300s
 if [[ $? -gt 0 ]]; then echo "[ERROR] - An error occurred while deploying the Order Management for Postgres microservice"; exit 1; else echo "Done"; fi
-
 
 #########################################
 ### 7. Kafka Connect and Postgres CDC ###

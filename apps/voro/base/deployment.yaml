@@ -27,7 +27,7 @@ spec:
           - configMapRef:
               name: kafka-topics-cm
           - secretRef:
-              name: kafka-schema-registry
+              name: kafka-schema-registry-ccompat
         resources:
           limits:
             cpu: 200m
