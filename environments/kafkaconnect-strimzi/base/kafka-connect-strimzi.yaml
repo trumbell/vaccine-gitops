@@ -1,11 +1,11 @@
 apiVersion: kafka.strimzi.io/v1beta1
 kind: KafkaConnect
 metadata:
-  name: connect-cluster-<UNIQUE_ID>
+  name: vaccine-connect-cluster
   annotations:
     strimzi.io/use-connector-resources: "true"
 spec:
-  bootstrapServers: '<KAFKA_BOOTSTRAP_URL>'
+  bootstrapServers: "vaccine-kafka-kafka-bootstrap:9093"
   image: quay.io/ibmcase/kafka-connect-postgres
   authentication:
     certificateAndKey:
@@ -20,12 +20,12 @@ spec:
         certificate: ca.crt
   replicas: 1
   config:
-    group.id: connect-cluster-<UNIQUE_ID>
+    group.id: vaccine-connect-cluster
     value.converter: org.apache.kafka.connect.json.JsonConverter
     value.converter.schemas.enable: false
-    offset.storage.topic: connect-cluster-offsets-<UNIQUE_ID>
-    config.storage.topic: connect-cluster-configs-<UNIQUE_ID>
-    status.storage.topic: connect-cluster-status-<UNIQUE_ID>
+    offset.storage.topic: vaccine-connect-cluster-offsets
+    config.storage.topic: vaccine-connect-cluster-configs
+    status.storage.topic: vaccine-connect-cluster-status
     config.storage.replication.factor: 3
     offset.storage.replication.factor: 3
     status.storage.replication.factor: 3

@@ -8,7 +8,7 @@ metadata:
     prometheus.io/port: "8080"
   labels:
     app.kubernetes.io/name: vaccineorderms
-    app.kubernetes.io/version: 0.0.4
+    app.kubernetes.io/version: 0.0.5
     app: vaccineorderms
   name: vaccineorderms
 spec:
@@ -25,7 +25,7 @@ spec:
         prometheus.io/port: "8080"
       labels:
         app.kubernetes.io/name: vaccineorderms
-        app.kubernetes.io/version: 0.0.4
+        app.kubernetes.io/version: 0.0.5
         app: vaccineorderms
         app.openshift.io/runtime: quarkus
     spec:
@@ -93,25 +93,16 @@ spec:
         - configMapRef:
             name: kafka-topics-cm
         - secretRef:
-            name: vaccine-order-secrets
-        - secretRef:
             name: kafka-schema-registry
         image: quay.io/ibmcase/vaccineorderms
         imagePullPolicy: Always
-        resources:
-          limits:
-            cpu: 1000m
-            memory: 512Mi
-          requests:
-            cpu: 250m
-            memory: 64Mi
         livenessProbe:
           failureThreshold: 3
           httpGet:
             path: /q/health/live
             port: 8080
             scheme: HTTP
-          initialDelaySeconds: 10
+          initialDelaySeconds: 30
           periodSeconds: 30
           successThreshold: 1
           timeoutSeconds: 10
@@ -126,10 +117,14 @@ spec:
             path: /q/health/ready
             port: 8080
             scheme: HTTP
-          initialDelaySeconds: 10
+          initialDelaySeconds: 30
           periodSeconds: 30
           successThreshold: 1
           timeoutSeconds: 10
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "250m"
         volumeMounts:
         - mountPath: /deployments/certs/server
           name: kafka-cert

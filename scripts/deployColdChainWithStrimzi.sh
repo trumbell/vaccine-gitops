@@ -47,7 +47,7 @@ echo "#####################################################"
 KAFKA_BOOTSTRAP=$(oc get route -n ${KAFKA_NS} ${KAFKA_CLUSTER_NAME}-kafka-bootstrap -o jsonpath="{.status.ingress[0].host}:443")
 if [[ -z $(oc get secret reefer-simul-secret) ]]
 then
-    echo "reefer-simul-secret  not found -> create it"
+    echo "reefer-simul-secret not found -> create it"
     oc create secret generic reefer-simul-secret \
     --from-literal=KAFKA_BOOTSTRAP_SERVERS=$EXTERNAL_KAFKA_BOOTSTRAP_SERVERS \
     --from-literal=KAFKA_MAIN_TOPIC=$YOUR_TELEMETRIES_TOPIC \

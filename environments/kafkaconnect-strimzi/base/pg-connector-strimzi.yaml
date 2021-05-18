@@ -1,9 +1,9 @@
 apiVersion: kafka.strimzi.io/v1alpha1 
 kind: KafkaConnector 
 metadata: 
-  name: pg-connector-apicurio
+  name: vaccine-pg-connector
   labels: 
-    strimzi.io/cluster: connect-cluster-<UNIQUE_ID>
+    strimzi.io/cluster: vaccine-connect-cluster
 spec: 
   class: io.debezium.connector.postgresql.PostgresConnector
   tasksMax: 1 
