@@ -6,4 +6,8 @@ spec:
   configuration:
     persistence: "streams"
     streams:
-      bootstrapServers: "vaccine-kafka-kafka-bootstrap.jbsandbox.svc:9092"
+      bootstrapServers: "vaccine-kafka-kafka-bootstrap.jbsandbox.svc:9093"
+      security:
+        tls:
+          keystoreSecretName: tls-user
+          truststoreSecretName: kafka-cluster-ca-cert

@@ -1,0 +1,178 @@
+{
+    "entityDefs": [
+        {
+            "name": "kafka_cluster",
+            "description": "A kafka cluster",
+            "superTypes": [
+                "Infrastructure"
+            ],
+            "category": "ENTITY",
+            "typeVersion": "1.0",
+            "attributeDefs": [
+                {
+                    "name": "name",
+                    "typeName": "string",
+                    "isOptional": false,
+                    "cardinality": "SINGLE",
+                    "valuesMinCount": 1,
+                    "valuesMaxCount": 1,
+                    "isUnique": true,
+                    "isIndexable": true
+                },
+                {
+                    "name": "owner",
+                    "typeName": "string",
+                    "isOptional": false,
+                    "cardinality": "SINGLE",
+                    "valuesMinCount": 1,
+                    "valuesMaxCount": 1,
+                    "isUnique": true,
+                    "isIndexable": true
+                },
+                {
+                    "name": "kafka_version",
+                    "typeName": "string",
+                    "isOptional": true,
+                    "cardinality": "SINGLE",
+                    "valuesMinCount": 1,
+                    "valuesMaxCount": 1,
+                    "isUnique": true,
+                    "isIndexable": true
+                },
+                {
+                    "name": "location",
+                    "typeName": "string",
+                    "isOptional": false,
+                    "cardinality": "SINGLE",
+                    "valuesMinCount": 1,
+                    "valuesMaxCount": 1,
+                    "isUnique": true,
+                    "isIndexable": true
+                },
+                {
+                    "name": "environment_type",
+                    "typeName": "string",
+                    "isOptional": false,
+                    "cardinality": "SINGLE",
+                    "valuesMinCount": 1,
+                    "valuesMaxCount": 1,
+                    "isUnique": true,
+                    "isIndexable": true
+                },
+                {
+                    "name": "replicas",
+                    "typeName": "int",
+                    "isOptional": true,
+                    "cardinality": "SINGLE",
+                    "valuesMinCount": 1,
+                    "valuesMaxCount": 2000,
+                    "isUnique": false,
+                    "isIndexable": false
+                },
+                {
+                    "name": "bootstrap_server",
+                    "typeName": "string",
+                    "isOptional": false,
+                    "cardinality": "SINGLE",
+                    "valuesMinCount": 1,
+                    "valuesMaxCount": 1,
+                    "isUnique": true,
+                    "isIndexable": true
+                }
+            ]
+        },
+        {
+            "name": "kafka_broker",
+            "description": "A kafka broker node",
+            "superTypes": [
+                "Infrastructure"
+            ],
+            "category": "ENTITY",
+            "typeVersion": "1.0",
+            "attributeDefs": [
+                {
+                    "name": "dns_name",
+                    "typeName": "string",
+                    "isOptional": false,
+                    "cardinality": "SINGLE",
+                    "valuesMinCount": 1,
+                    "valuesMaxCount": 1,
+                    "isUnique": true,
+                    "isIndexable": true
+                }
+            ]
+        },
+        {
+            "superTypes": [
+                "DataSet"
+            ],
+            "category": "ENTITY",
+            "name": "kafka_message_schema",
+            "description": "schema for kafka message, simple non-nested",
+            "typeVersion": "1.0",
+            "attributeDefs": [
+                {
+                    "name": "clazz",
+                    "typeName": "string",
+                    "isOptional": false,
+                    "cardinality": "SINGLE",
+                    "valuesMinCount": 1,
+                    "valuesMaxCount": 1,
+                    "isUnique": false,
+                    "isIndexable": false
+                },
+                {
+                    "name": "data_type",
+                    "typeName": "string",
+                    "isOptional": false,
+                    "cardinality": "SINGLE",
+                    "valuesMinCount": 1,
+                    "valuesMaxCount": 1,
+                    "isUnique": false,
+                    "isIndexable": false
+                },
+                {
+                    "name": "required",
+                    "typeName": "boolean",
+                    "isOptional": true,
+                    "cardinality": "SINGLE",
+                    "valuesMinCount": 1,
+                    "valuesMaxCount": 1,
+                    "isUnique": false,
+                    "isIndexable": false
+                }
+            ]
+        },
+        {
+            "superTypes": [
+                "kafka_topic"
+            ],
+            "category": "ENTITY",
+            "name": "kafka_topic_and_schema",
+            "description": "a type definition for a kafka topic with message schema definition",
+            "typeVersion": "1.0",
+            "attributeDefs": [
+                {
+                    "name": "key_schema",
+                    "typeName": "array<kafka_message_schema>",
+                    "isOptional": true,
+                    "cardinality": "SINGLE",
+                    "valuesMinCount": 1,
+                    "valuesMaxCount": 1,
+                    "isUnique": false,
+                    "isIndexable": false
+                },
+                {
+                    "name": "value_schema",
+                    "typeName": "array<kafka_message_schema>",
+                    "isOptional": true,
+                    "cardinality": "SINGLE",
+                    "valuesMinCount": 1,
+                    "valuesMaxCount": 1,
+                    "isUnique": false,
+                    "isIndexable": false
+                }
+            ]
+        }
+    ]
+}
