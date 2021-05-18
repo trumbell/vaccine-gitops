@@ -1,7 +1,7 @@
 apiVersion: kafka.strimzi.io/v1beta1
 kind: KafkaTopic
 metadata:
-  name: vaccine.shipment.plans
+  name: vaccine.shipment.plan
   labels:
     strimzi.io/cluster: vaccine-kafka
 spec:
