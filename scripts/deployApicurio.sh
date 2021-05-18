@@ -44,6 +44,21 @@ spec:
 EOF
 }
 
+function create_operator_group {
+### Function to create an Operator Group for the Apicurio Registry Operator to use
+### parameters:
+### $1 - openshift project
+cat <<EOF | oc apply -f -
+apiVersion: operators.coreos.com/v1
+kind: OperatorGroup
+metadata:
+  name: ${1}
+  namespace: ${1}
+spec:
+  targetNamespaces:
+  - ${1}
+EOF
+}
 
 ############
 ### MAIN ###
@@ -63,6 +78,11 @@ then
     echo "[ERROR] - An error occurred while logging into your OpenShift cluster"
     exit 1
 fi
+
+# Create an Operator Group so that the Apicurio Registry Operator finds a namespaced Operator Group
+# for a namespaced Apicurio Registry Operator install
+echo "Create the Operator Group"
+create_operator_group "${YOUR_PROJECT_NAME}"
 
 echo "Install the Apicurio Registry Operator"
 install_operator "apicurio-registry" "community-operators" "${YOUR_PROJECT_NAME}" "alpha"
