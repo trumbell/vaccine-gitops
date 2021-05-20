@@ -287,7 +287,7 @@ echo "5. Deploy Postgresql"
 echo "--------------------"
 ### Deploy Postgres
 echo "Deploy Postgresql"
-oc apply -k ../environments/postgres -n ${YOUR_PROJECT_NAME}
+oc apply -k $scriptDir/../environments/postgres -n ${YOUR_PROJECT_NAME}
 echo "Wait for Postgres to be deployed..."
 oc wait pod --for=condition=Ready -l app=postgresql -n ${YOUR_PROJECT_NAME} --timeout=300s
 if [[ $? -gt 0 ]]; then echo "[ERROR] - An error occurred while deploying Postgresql"; exit 1; else echo "Done"; fi
@@ -323,7 +323,7 @@ echo "6. Deploy the Order Management for Postgresql microservice"
 echo "----------------------------------------------------------"
 ### Deploy Order Management for Postgres microservice
 echo "Deploy the Order Management for Postgres microservice"
-oc apply -k ../apps/order-mgt -n $YOUR_PROJECT_NAME
+oc apply -k $scriptDir/../apps/order-mgt -n $YOUR_PROJECT_NAME
 echo "Wait for the Order Management for Postgres microservice to be deployed..."
 oc wait pod --for=condition=Ready -l app=vaccineorderms -n ${YOUR_PROJECT_NAME} --timeout=300s
 if [[ $? -gt 0 ]]; then echo "[ERROR] - An error occurred while deploying the Order Management for Postgres microservice"; exit 1; else echo "Done"; fi
@@ -336,7 +336,7 @@ echo "7. Deploy Kafka Connect Cluster and Postgres CDC connector"
 echo "----------------------------------------------------------"
 ### Deploy Kafka Connect
 echo "Deploy Kakfa Connect Cluster and create Postgres CDC connector instance"
-oc apply -k ../environments/kafkaconnect-strimzi
+oc apply -k $scriptDir/../environments/kafkaconnect-strimzi
 echo "Wait for the Kafka Connect Cluster to be deployed"
 oc wait kafkaconnects.kafka.strimzi.io/${KAFKA_CONNECT_CLUSER_NAME}  --for=condition=Ready -n ${YOUR_PROJECT_NAME} --timeout=300s
 if [[ $? -gt 0 ]]; then echo "[ERROR] - An error occurred while deploying the Kakfa Connect Cluster"; exit 1; else echo "Done"; fi
@@ -353,7 +353,7 @@ echo "8. Deploy the Vaccine Order Optimization microservice"
 echo "-----------------------------------------------------"
 ### Deploy Vaccine Order Optimization microservice
 echo "Deploy the Vaccine Order Optimization microservice"
-oc apply -k ../apps/voro -n $YOUR_PROJECT_NAME
+oc apply -k $scriptDir/../apps/voro -n $YOUR_PROJECT_NAME
 echo "Wait for the Vaccine Order Optimization microservice to be deployed..."
 oc wait pod --for=condition=Ready -l app=vaccine-order-optimizer -n ${YOUR_PROJECT_NAME} --timeout=300s
 if [[ $? -gt 0 ]]; then echo "[ERROR] - An error occurred while deploying the Vaccine Order Optimization microservice"; exit 1; else echo "Done"; fi
