@@ -106,7 +106,7 @@ else
   echo "Done"
 fi
 
-oc apply -k ../environments/apicurio -n $YOUR_PROJECT_NAME
+oc apply -k $scriptDir/../environments/apicurio -n $YOUR_PROJECT_NAME
 
 echo -n "Wait for the Apicurio registry to be deployed..."
 counter=0

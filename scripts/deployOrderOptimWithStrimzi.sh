@@ -42,7 +42,7 @@ function register_avro_schemas(){
     do
         # Register the schema
         echo -n "Register Avro schema for ${topic}'s value..."
-        response=`curl -s -o /dev/null -w "%{http_code}" -X POST -H "Content-type: application/json; artifactType=AVRO" -H "X-Registry-ArtifactId: ${topic}-value" --data @../data/CloudEvent.avsc http://${ar_url}/api/artifacts`
+        response=`curl -s -o /dev/null -w "%{http_code}" -X POST -H "Content-type: application/json; artifactType=AVRO" -H "X-Registry-ArtifactId: ${topic}-value" --data @${scriptDir}/../data/CloudEvent.avsc http://${ar_url}/api/artifacts`
         if [[ $response -ne 200 ]]; then echo "[ERROR] - An error occurred while registering the Avro Schema for ${topic}'s value" ; exit 1; fi
         echo "Done"
     done
@@ -50,12 +50,12 @@ function register_avro_schemas(){
     # Register Specific Avro Schema for Postgres CDC Order Events for topic vaccine.public.orderevents
     # Register the key
     echo -n "Register Avro schema for vaccine.public.orderevents' key..."
-    response=`curl -s -o /dev/null -w "%{http_code}" -X POST -H "Content-type: application/json; artifactType=AVRO" -H "X-Registry-ArtifactId: vaccine.public.orderevents-key" --data @../data/OrderEventKey.avsc http://${ar_url}/api/artifacts`
+    response=`curl -s -o /dev/null -w "%{http_code}" -X POST -H "Content-type: application/json; artifactType=AVRO" -H "X-Registry-ArtifactId: vaccine.public.orderevents-key" --data @${scriptDir}/../data/OrderEventKey.avsc http://${ar_url}/api/artifacts`
     if [[ $response -ne 200 ]]; then echo "[ERROR] - An error occurred while registering the Avro Schema for vaccine.public.orderevents' key" ; exit 1; fi
     echo "Done"
     # Register the key
     echo -n "Register Avro schema for vaccine.public.orderevents' value..."
-    response=`curl -s -o /dev/null -w "%{http_code}" -X POST -H "Content-type: application/json; artifactType=AVRO" -H "X-Registry-ArtifactId: vaccine.public.orderevents-value" --data @../data/OrderEventValue.avsc http://${ar_url}/api/artifacts`
+    response=`curl -s -o /dev/null -w "%{http_code}" -X POST -H "Content-type: application/json; artifactType=AVRO" -H "X-Registry-ArtifactId: vaccine.public.orderevents-value" --data @${scriptDir}/../data/OrderEventValue.avsc http://${ar_url}/api/artifacts`
     if [[ $response -ne 200 ]]; then echo "[ERROR] - An error occurred while registering the Avro Schema for vaccine.public.orderevents' value" ; exit 1; fi
     echo "Done"
 

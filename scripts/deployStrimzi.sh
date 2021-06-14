@@ -111,7 +111,7 @@ else
 fi
 
 echo "Create a Kafka cluster"
-oc apply -k ../environments/strimzi -n $YOUR_PROJECT_NAME
+oc apply -k $scriptDir/../environments/strimzi -n $YOUR_PROJECT_NAME
 echo -n "Waiting for the Kafka cluster to be available..."
 counter=0
 isKafkaReady="NotReady"
