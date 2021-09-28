@@ -1,0 +1,20 @@
+oc get secret kafka-cluster-ca-cert -o jsonpath='{.data.ca\.crt}' -n trumbell | base64 -d > ca.crt
+oc get secret tls-user -n trumbell -o jsonpath='{.data.user\.password}' | base64 -d > user.password 
+oc get secret tls-user -n trumbell -o jsonpath='{.data.user\.p12}' | base64 -d > user.p12
+keytool -keystore user-truststore.jks -alias CARoot -import -file ca.crt
+keytool -importkeystore -srckeystore user.p12 -srcstoretype pkcs12 -destkeystore user-keystore.jks -deststoretype jks
+oc get secret scram-user -o jsonpath='{.data.sasl\.jaas\.config}' | base64 -d > scram-user.sasl.jaas.config 
+
+# File: client-ssl-auth.properties
+bootstrap.servers=vaccine-kafka-kafka-bootstrap-trumbell.o7-111a9c298953d78649164b7e8394bcdc-0000.us-south.containers.appdomain.cloud:443
+security.protocol=SASL_SSL
+ssl.truststore.location=user-truststore.jks
+ssl.truststore.password=changeit
+sasl.mechanism=SCRAM-SHA-512
+sasl.jaas.config=org.apache.kafka.common.security.scram.ScramLoginModule required username="scram-user" password="QknLqXvnmuUq";
+
+# Consumer:
+./kafka-console-consumer.sh --bootstrap-server bootstrap.servers=vaccine-kafka-kafka-bootstrap-trumbell.o7-111a9c298953d78649164b7e8394bcdc-0000.us-south.containers.appdomain.cloud:443 --topic reefer.telemetries --consumer.config client-ssl-auth.properties --from-beginning
+
+# Producer:
+./kafka-console-consumer.sh --broker-list bootstrap.servers=vaccine-kafka-kafka-bootstrap-trumbell.o7-111a9c298953d78649164b7e8394bcdc-0000.us-south.containers.appdomain.cloud:443 --topic reefer.telemetries --producer.config client-ssl-auth.properties

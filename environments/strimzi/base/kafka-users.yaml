@@ -45,6 +45,8 @@ metadata:
     strimzi.io/cluster: vaccine-kafka
 spec:
   authentication:
+    type: tls
+  authentication:
     type: scram-sha-512
   authorization:
     type: simple
