@@ -33,6 +33,7 @@ spec:
       transaction.state.log.min.isr: 2
       log.message.format.version: "2.8"
       inter.broker.protocol.version: "2.8"
+      auto.commit.interval.ms: 500
     storage:
       type: ephemeral
   zookeeper:

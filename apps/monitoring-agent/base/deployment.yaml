@@ -75,7 +75,8 @@ spec:
             name: reefer-monitoring-agent-cm
         - secretRef:
             name: reefer-monitoring-agent-secret
-        image: quay.io/ibmcase/reefer-monitoring-agent
+        # image: quay.io/ibmcase/reefer-monitoring-agent
+        image: quay.io/trumbell/reefer-monitoring-agent
         imagePullPolicy: IfNotPresent
         livenessProbe:
           failureThreshold: 3

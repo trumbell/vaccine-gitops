@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: vaccine-reefer-simulator
-        image: quay.io/ibmcase/vaccine-reefer-simulator:latest
+        image: quay.io/trumbell/vaccine-reefer-simulator:latest
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 5000
