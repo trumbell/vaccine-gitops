@@ -173,22 +173,36 @@ if __name__ == "__main__":
     assert sys.version_info >= (3, 7), "Script requires Python 3.7+."
     here = pathlib.Path(__file__).parent
 
-    n_containers = 10
-    n_delay = 5
-    n_records = 100
+    n_containers = 200
+    n_delay = 30
+    min_delay = 0
+    n_records = 1
+    n_repeats = np.inf
+
+    n_container_list = [100, 200, 100]
+    n_repeats_list = [40, 40, 40]
 
     url = "http://vaccine-reefer-simulator-trumbell.o7-111a9c298953d78649164b7e8394bcdc-0000.us-south.containers.appdomain.cloud/control"
-    datasets = [{
-        "containerID": container_name, 
-        "nb_of_records": n_records, 
-        "product_id": "P01", 
-        "simulation": "tempgrowth"
-    } for container_name in [f'C{i:06}' for i in range(1,n_containers+1)]]
+    
+    jj = 0
+    while (jj<len(n_container_list)):
 
-    while True:
-        start = time.time()
-        results = asyncio.run(make_requests(url=url, datasets=datasets))
-        stop = time.time()
-        elapsed = stop-start
-        time.sleep(max(n_delay-elapsed, 0.0))
+        datasets = [{
+            "containerID": "C000001", 
+            "nb_of_records": n_records, 
+            "product_id": "P01", 
+            "simulation": "tempgrowth",
+            "nb_in_batch": n_container_list[jj]
+        }] # for container_name in [f'C{i:06}' for i in range(1,n_container_list[jj]+1)]]
 
+        ii = 0
+        while ii < n_repeats_list[jj]:
+            start = time.time()
+            results = asyncio.run(make_requests(url=url, datasets=datasets))
+            stop = time.time()
+            elapsed = stop-start
+            print(elapsed)
+            time.sleep(max(n_delay-elapsed, min_delay))
+            ii = ii + 1
+
+        jj = jj + 1

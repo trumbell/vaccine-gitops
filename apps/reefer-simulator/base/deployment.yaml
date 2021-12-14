@@ -17,7 +17,7 @@ spec:
       containers:
       - name: vaccine-reefer-simulator
         image: quay.io/trumbell/vaccine-reefer-simulator:latest
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         ports:
         - containerPort: 5000
           protocol: TCP

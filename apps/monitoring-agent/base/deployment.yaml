@@ -39,6 +39,10 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
         - name: JAVA_LIB_DIR
           value: /deployments/lib
         - name: JAVA_APP_JAR
@@ -65,6 +69,11 @@ spec:
           value: SSL
         - name: KAFKA_USER
           value: tls-user
+        - name: KAFKA_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: scram-user
         - name: KAFKA_SSL_TRUSTSTORE_PASSWORD
           valueFrom:
             secretKeyRef:
@@ -77,7 +86,8 @@ spec:
             name: reefer-monitoring-agent-secret
         # image: quay.io/ibmcase/reefer-monitoring-agent
         image: quay.io/trumbell/reefer-monitoring-agent
-        imagePullPolicy: IfNotPresent
+        # imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         livenessProbe:
           failureThreshold: 3
           httpGet:

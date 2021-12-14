@@ -16,7 +16,17 @@ metadata:
   labels:
     strimzi.io/cluster: vaccine-kafka
 spec:
-  partitions: 3
+  partitions: 80
+  replicas: 3
+---
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: reefer.telemetries.processedtime
+  labels:
+    strimzi.io/cluster: vaccine-kafka
+spec:
+  partitions: 1
   replicas: 3
 ---
 apiVersion: kafka.strimzi.io/v1beta1
