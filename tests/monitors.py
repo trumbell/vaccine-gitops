@@ -114,8 +114,8 @@ class ConsumerOffsetMonitor():
     def get_offset_lag_for_consumer(self, consumer, topics=[]):
         partitions = kt.get_partitions_for_consumer(consumer, topics)
         ids = range(len(partitions))
-        watermarks = [consumer.get_watermark_offsets(part)[1] for part in partitions]
         committeds = [np.max([0, part.offset]) for part in consumer.committed(partitions)]
+        watermarks = [consumer.get_watermark_offsets(part)[1] for part in partitions]
         offset_df = pd.DataFrame(list(zip(ids, watermarks, committeds)), 
                                  columns=['id', 'watermark', 'committed'])
         offset_df['lag'] = offset_df['watermark'] - offset_df['committed']
