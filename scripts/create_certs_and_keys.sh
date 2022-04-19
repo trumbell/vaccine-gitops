@@ -15,7 +15,7 @@ else
  namespace=trumbell
 fi
 
-oc get secret kafka-cluster-ca-cert -n ${namespace} -o jsonpath='{.data.ca\.crt}' -n trumbell | base64 -d > ${scriptDir}/${certDir}/ca.crt
+oc get secret kafka-cluster-ca-cert -n ${namespace} -o jsonpath='{.data.ca\.crt}' | base64 -d > ${scriptDir}/${certDir}/ca.crt
 
 oc get secret scram-user -n ${namespace} -o jsonpath='{.data.password}' | base64 -d > ${scriptDir}/${certDir}/scram-user.password
 
@@ -33,4 +33,3 @@ keytool -keystore ${scriptDir}/${certDir}/user-truststore.jks -alias CARoot -imp
 # Requires new password - enter any password twice - then update this password in client-ssl-auth.properties
 # then requires user.password - copy contents of user.password and paste at prompt
 keytool -importkeystore -srckeystore ${scriptDir}/${certDir}/user.p12 -srcstoretype pkcs12 -destkeystore ${scriptDir}/${certDir}/user-keystore.jks -deststoretype jks
-

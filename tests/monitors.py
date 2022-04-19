@@ -98,6 +98,7 @@ class ConsumerOffsetMonitor():
         self._df = self.init_df()
         self._c = self.init_consumer(self._conf, group_id=self._group_id)
         self._c.close()
+        self._offsets = None
 
     def init_consumer(self, conf, group_id=None):
         if group_id:
@@ -126,6 +127,7 @@ class ConsumerOffsetMonitor():
         self._c = self.init_consumer(self._conf, group_id=self._group_id)
         offsets = self.get_offset_lag_for_consumer(consumer=self._c, topics=self._topic)
         self._c.close()
+        self._offsets = offsets
         if aggregate_df:
             if self._df.shape[0] > 0:
                 new_msgs = offsets['watermark'].sum() - self._df.iloc[-1]['watermark']
